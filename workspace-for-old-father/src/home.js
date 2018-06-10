@@ -27,13 +27,13 @@ class Home extends Component {
                         </Menu>    
                     </Sider> 
                     <Content>
-                        <Select defaultValue="全部" style={{ width: 120, margin: (20, 0, 0, 20)}} onChange={handleChange}>
-                        <Option value="全部">全部</Option>
-                        <Option value="加饭酒">加饭酒</Option>
-                        <Option value="手工冬酿">手工冬酿</Option>
-                        <Option value="料酒">料酒</Option>
-                        <Option value="花雕">花雕</Option>
-                        <Option value="黄酒">黄酒</Option>
+                        <Select defaultValue="全部" style={{ width: 120, margin: (20, 0, 0, 20)}} onChange={selectChange}>
+                        <Option value="0">全部</Option>
+                        <Option value="1">加饭酒</Option>
+                        <Option value="2">手工冬酿</Option>
+                        <Option value="3">料酒</Option>
+                        <Option value="4">花雕</Option>
+                        <Option value="5">黄酒</Option>
                         </Select>
                         <Button type="primary" icon='upload' onClick={uploadClick}>上传图片</Button>
                         <List
@@ -45,16 +45,12 @@ class Home extends Component {
                             <List.Item actions={[<a>编辑</a>, <a>删除</a>]}>
                                 <List.Item.Meta
                                 avatar={<Avatar src={item.cover[0]} />}
-                                title={<a>{item.title}</a>}
+                                title={<span>{item.title}</span>}
                                 description={<span>规格：{item.specification}，价格：￥{item.price}</span>}
                                 />
                             </List.Item>
                             )}
                         />
-                        {/* <Row type="flex" justify="end">
-                            <Pagination showQuickJumper defaultCurrent={1} total={12} onChange={onChange} hideOnSinglePage 
-                            style={{ marginBottom:20}} /> 
-                        </Row> */}
                     </Content>
                 </Layout>
             </div>
@@ -63,8 +59,9 @@ class Home extends Component {
 }
 
 /* event */
-function handleChange(value) {
+function selectChange(value) {
     console.log(`selected ${value}`);
+    
 }
 
 function uploadClick(value) {
