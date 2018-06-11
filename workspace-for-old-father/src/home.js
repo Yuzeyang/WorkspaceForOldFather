@@ -6,6 +6,28 @@ const { Header, Sider, Content } = Layout;
 const Option = Select.Option;
 
 class Home extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: all_data
+        };
+    }
+	
+	selectChange = (value) => {
+        if (value == 0) {
+			var data = all_data
+		} else {
+			var data = all_data.filter( item => {
+					console.log(item);
+					return item.category.includes(value);
+				}
+			);
+		}
+		this.setState({
+			data: data
+		});
+	}
+
     render() {
         return (
             <div>
@@ -27,7 +49,7 @@ class Home extends Component {
                         </Menu>    
                     </Sider> 
                     <Content>
-                        <Select defaultValue="全部" style={{ width: 120, margin: (20, 0, 0, 20)}} onChange={selectChange}>
+                        <Select defaultValue="全部" style={{ width: 120, margin: (20, 0, 0, 20)}} onChange={this.selectChange}>
                         <Option value="0">全部</Option>
                         <Option value="1">加饭酒</Option>
                         <Option value="2">手工冬酿</Option>
@@ -40,7 +62,7 @@ class Home extends Component {
                             itemLayout="horizontal"
                             style={{ margin: (0, 20, 0, 20)}}
                             pagination={{showQuickJumper:true}}
-                            dataSource={data}
+                            dataSource={this.state.data}
                             renderItem={item => (
                             <List.Item actions={[<a>编辑</a>, <a>删除</a>]}>
                                 <List.Item.Meta
@@ -59,11 +81,6 @@ class Home extends Component {
 }
 
 /* event */
-function selectChange(value) {
-    console.log(`selected ${value}`);
-    
-}
-
 function uploadClick(value) {
     console.log('点击了上传');
 }
@@ -81,7 +98,7 @@ function onChange(pageNumber) {
 }
 
 /* 测试 */
-const data = [
+var all_data = [
 	/**
 	 * 加饭酒
 	 */
