@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Layout, Button, List, Avatar, Spin, Menu, Icon, Pagination, Row } from 'antd';
+import { Select, Layout, Button, List, Avatar, Spin, Menu, Icon, Pagination, Row, Modal, Upload, message } from 'antd';
 import './home.css';
 
 const { Header, Sider, Content } = Layout;
@@ -9,10 +9,17 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: all_data
+			data: all_data,
+			modal_visiable: false,
+			modal_loading: false,
+			edit_model: null,
+			previewVisible: false,
+    		previewImage: '',
+			fileList: [],
         };
     }
 	
+	/* 分类选择 */
 	selectChange = (value) => {
         if (value == 0) {
 			var data = all_data
@@ -28,7 +35,61 @@ class Home extends Component {
 		});
 	}
 
+	/* 编辑或新增商品事件 */
+	editGoods = (item) => {
+		console.log(item == null ? "空" : "非空");
+		this.setState({
+			modal_visiable: true,
+			edit_model: item
+		})
+	}
+
+	
+	handleOk = () => {
+		this.setState({ modal_loading: true });
+		setTimeout(() => {
+		  this.setState({ modal_loading: false, modal_visiable: false });
+		}, 3000);
+	}
+	
+	handleCancel = () => {
+		this.setState({ modal_visiable: false });
+	}
+
+	/* 照片上传事件 */
+	beforeUpload = (file) => {
+		const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg';
+		const isPNG = file.type === 'image/png';
+		if (!isJPG && !isPNG) {
+		  message.error('请上传 jpeg、jpg、png 格式的图片!');
+		}
+		const isLt2M = file.size / 1024 / 1024 < 2;
+		if (!isLt2M) {
+		  message.error('Image must smaller than 2MB!');
+		}
+		return isJPG && isLt2M;
+	}
+
+	handleUploadCancel = () => this.setState({ previewVisible: false })
+
+	handlePreview = (file) => {
+		this.setState({
+		  previewImage: file.url || file.thumbUrl,
+		  previewVisible: true,
+		});
+	}
+	
+	handleChange = ({ fileList }) => this.setState({ fileList })
+
+
+
     render() {
+		const uploadButton = (
+			<div>
+			  <Icon type="plus" />
+			  <div className="ant-upload-text">上传图片</div>
+			</div>
+		);
         return (
             <div>
                 <Layout>
@@ -57,7 +118,39 @@ class Home extends Component {
                         <Option value="4">花雕</Option>
                         <Option value="5">黄酒</Option>
                         </Select>
-                        <Button type="primary" icon='upload' onClick={uploadClick}>上传图片</Button>
+						<Button type="primary" icon='plus' onClick={this.editGoods.bind(this, null)}>新增商品</Button>
+						<Modal
+							visible={this.state.modal_visiable}
+							title={this.state.edit_model == null ? "新增商品" : "编辑商品"}
+							onOk={this.handleOk}
+							onCancel={this.handleCancel}
+							footer={[
+								<Button key="back" onClick={this.handleCancel}>取消</Button>,
+								<Button key="submit" type="primary" loading={this.state.modal_loading} onClick={this.handleOk}>
+								确定
+								</Button>,
+							]}>
+							<p>编辑商品图片：</p>
+							<div className="clearfix">
+								<Upload
+								action="//jsonplaceholder.typicode.com/posts/"
+								listType="picture-card"
+								fileList={this.state.fileList}
+								beforeUpload={this.beforeUpload}
+								onPreview={this.handlePreview}
+								onChange={this.handleChange}
+								>
+								{this.state.fileList.length >= 10 ? null : uploadButton}
+								</Upload>
+								<Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleUploadCancel}>
+								<img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+								</Modal>
+							</div>
+							<p>Some contents...</p>
+							<p>Some contents...</p>
+							<p>Some contents...</p>
+							<p>Some contents...</p>
+						</Modal>
                         <List
                             itemLayout="horizontal"
                             style={{ margin: (0, 20, 0, 20)}}
@@ -78,11 +171,6 @@ class Home extends Component {
             </div>
         )
     }
-}
-
-/* event */
-function uploadClick(value) {
-    console.log('点击了上传');
 }
 
 function itemClick(item, key, keyPath) {
