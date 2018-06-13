@@ -4,6 +4,7 @@ import './home.css';
 
 const { Header, Sider, Content } = Layout;
 const Option = Select.Option;
+const confirm = Modal.confirm;
 
 class Home extends Component {
     constructor(props) {
@@ -86,8 +87,29 @@ class Home extends Component {
 		console.log('changed', value);
 	}
 
+	/* 编辑分类 */
 	onCategorySelect = (value) => {
 		console.log(value);
+	}
+	
+	listItemEditClick = (value) => {
+		console.log(value);
+	}
+
+	listItemDelClick = () => {
+		confirm({
+			title: '确定删除该商品吗？',
+			content: '删除该商品会导致在其他活动页面上也将不展示该商品信息',
+			okText: '确定',
+			okType: 'danger',
+			cancelText: '取消',
+			onOk() {
+			  console.log('OK');
+			},
+			onCancel() {
+			  console.log('Cancel');
+			},
+		  });
 	}
 
     render() {
@@ -186,12 +208,12 @@ class Home extends Component {
                             pagination={{showQuickJumper:true}}
                             dataSource={this.state.data}
                             renderItem={item => (
-                            <List.Item actions={[<a>编辑</a>, <a>删除</a>]}>
+                            <List.Item actions={[<a onClick={this.editGoods.bind(this, '1')}>编辑</a>, <a onClick={this.listItemDelClick}>删除</a>]}>
                                 <List.Item.Meta
                                 avatar={<Avatar src={item.cover[0]} />}
                                 title={<span>{item.title}</span>}
-                                description={<span>规格：{item.specification}，价格：￥{item.price}</span>}
-                                />
+								description={<span>规格：{item.specification}，价格：￥{item.price}</span>}
+								/>
                             </List.Item>
                             )}
                         />
