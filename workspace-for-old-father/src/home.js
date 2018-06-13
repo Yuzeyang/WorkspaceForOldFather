@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Layout, Button, List, Avatar, Spin, Menu, Icon, Pagination, Row, Modal, Upload, message } from 'antd';
+import { Select, Layout, Button, List, Avatar, Spin, Menu, Icon, Pagination, Row, Modal, Upload, message, Input, InputNumber } from 'antd';
 import './home.css';
 
 const { Header, Sider, Content } = Layout;
@@ -65,7 +65,7 @@ class Home extends Component {
 		}
 		const isLt2M = file.size / 1024 / 1024 < 2;
 		if (!isLt2M) {
-		  message.error('Image must smaller than 2MB!');
+		  message.error('图片大小不能超过2MB!');
 		}
 		return isJPG && isLt2M;
 	}
@@ -81,7 +81,14 @@ class Home extends Component {
 	
 	handleChange = ({ fileList }) => this.setState({ fileList })
 
+	/* 价格变动 */
+	onPriceChange = (value) => {
+		console.log('changed', value);
+	}
 
+	onCategorySelect = (value) => {
+		console.log(value);
+	}
 
     render() {
 		const uploadButton = (
@@ -106,17 +113,21 @@ class Home extends Component {
                             <Menu.Item key="2">
                             <Icon type="profile" />
                             <span className="nav-text">分类管理</span>
+							</Menu.Item>
+							<Menu.Item key="3">
+                            <Icon type="tags" />
+                            <span className="nav-text">营销区管理</span>
                             </Menu.Item>
                         </Menu>    
                     </Sider> 
                     <Content>
                         <Select defaultValue="全部" style={{ width: 120, margin: (20, 0, 0, 20)}} onChange={this.selectChange}>
-                        <Option value="0">全部</Option>
-                        <Option value="1">加饭酒</Option>
-                        <Option value="2">手工冬酿</Option>
-                        <Option value="3">料酒</Option>
-                        <Option value="4">花雕</Option>
-                        <Option value="5">黄酒</Option>
+							<Option value="0">全部</Option>
+							<Option value="1">加饭酒</Option>
+							<Option value="2">手工冬酿</Option>
+							<Option value="3">料酒</Option>
+							<Option value="4">花雕</Option>
+							<Option value="5">黄酒</Option>
                         </Select>
 						<Button type="primary" icon='plus' onClick={this.editGoods.bind(this, null)}>新增商品</Button>
 						<Modal
@@ -130,7 +141,7 @@ class Home extends Component {
 								确定
 								</Button>,
 							]}>
-							<p>编辑商品图片：</p>
+							<p>商品图片：</p>
 							<div className="clearfix">
 								<Upload
 								action="//jsonplaceholder.typicode.com/posts/"
@@ -146,10 +157,28 @@ class Home extends Component {
 								<img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
 								</Modal>
 							</div>
-							<p>Some contents...</p>
-							<p>Some contents...</p>
-							<p>Some contents...</p>
-							<p>Some contents...</p>
+							<div style={{ marginTop:10 }}>商品类别：
+								<Select defaultValue="加饭酒" style={{ width: 120 }} onChange={this.onCategorySelect}>
+									<Option value="1">加饭酒</Option>
+									<Option value="2">手工冬酿</Option>
+									<Option value="3">料酒</Option>
+									<Option value="4">花雕</Option>
+									<Option value="5">黄酒</Option>
+								</Select>
+							</div>
+							<p style={{ marginTop:10 }}>商品名称：</p>
+							<Input placeholder='例如：五年加饭酒' />
+							<div style={{ marginTop:10 }}>商品价格：
+								<InputNumber
+								defaultValue={0.00}
+								precision={2}
+								formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+								parser={value => value.replace(/\￥\s?|(,*)/g, '')}
+								onChange={this.onPriceChange}
+								/>
+							</div>
+							<p style={{ marginTop:10 }}>商品规格：</p>
+							<Input placeholder='例如：2.5L*6桶' />
 						</Modal>
                         <List
                             itemLayout="horizontal"
