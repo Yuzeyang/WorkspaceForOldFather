@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Layout, Menu, Icon, Modal } from 'antd';
+import {  Layout, Menu, Icon } from 'antd';
 import './home.css';
 import Goods from './goods'
 import Category from './category'
@@ -11,7 +11,7 @@ class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			menuSelect: '1'
+			menuSelect: '2'
 		}
 	}
 	

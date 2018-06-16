@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Layout, Button, List, Avatar, Icon, Modal, Upload, message, Input, InputNumber } from 'antd';
+import { Select, Button, List, Avatar, Icon, Modal, Upload, message, Input, InputNumber } from 'antd';
 
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -20,10 +20,11 @@ class Goods extends Component {
 	
 	/* 分类选择 */
 	selectChange = (value) => {
-        if (value == 0) {
-			var data = all_data
+		var data
+		if (parseInt(value) === 0) {
+			data = all_data
 		} else {
-			var data = all_data.filter( item => {
+			data = all_data.filter( item => {
 					console.log(item);
 					return item.category.includes(value);
 				}
@@ -97,7 +98,7 @@ class Goods extends Component {
 	listItemDelClick = () => {
 		confirm({
 			title: '确定删除该商品吗？',
-			content: '删除该商品会导致在其他活动页面上也将不展示该商品信息',
+			content: '删除该商品会导致在其他活动页面上也将不展示该商品信息！',
 			okText: '确定',
 			okType: 'danger',
 			cancelText: '取消',
