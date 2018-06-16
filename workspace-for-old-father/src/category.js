@@ -32,18 +32,18 @@ class Category extends React.Component {
 
     categoryDelete = () => {
         confirm({
-			title: '确定删除该分类吗？',
-			content: '删除该分类会导致该分类下所有商品需重新分配类别！',
-			okText: '确定',
-			okType: 'danger',
-			cancelText: '取消',
-			onOk() {
-			  console.log('OK');
-			},
-			onCancel() {
-			  console.log('Cancel');
-			},
-		  });   
+            title: '确定删除该分类吗？',
+            content: '删除该分类会导致该分类下所有商品需重新分配类别！',
+            okText: '确定',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk() {
+                console.log('OK');
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
 
     render() {
@@ -58,10 +58,10 @@ class Category extends React.Component {
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>返回</Button>,
                         <Button key="submit" type="primary" loading={this.state.loading} onClick={this.handleOk}>
-                        确定
+                            确定
                         </Button>,
                     ]}
-                    >
+                >
                     <p>分类名称：</p>
                     <Input placeholder='例如：加饭酒'></Input>
                 </Modal>
